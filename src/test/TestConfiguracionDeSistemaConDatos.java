@@ -228,7 +228,7 @@ public class TestConfiguracionDeSistemaConDatos {
 
 			int size=local.getProductos().size();
 			assertEquals("La lista no contiene el elementado a agregar",local.getProductos().get(size-1).getNombre(),"Macchiato");
-			assertEquals("El id no se genera correctamente", local.getProductos().get(size-1).getNombre(), 1);
+			assertEquals("El id no se genera correctamente", local.getProductos().get(size-1).getId(), 1);
 			
 		}catch(Exception e){
 			
