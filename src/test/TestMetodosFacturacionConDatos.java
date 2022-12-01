@@ -23,21 +23,50 @@ import capaDeNegocios.Local;
 import capaDeNegocios.MetodosFacturacion;
 
 public class TestMetodosFacturacionConDatos {
-	private MetodosFacturacion mf = MetodosFacturacion.getInstance();
+	private MetodosFacturacion mf;
 	private Local local;
-	private PromocionProducto promocionProducto1;
+	private Producto producto1; 
+	private PromocionProducto promocionProducto1, promocion producto 2;
 	private PromocionTemporal promocionTemporal1;
-	private EscenarioConDatos E1 = new EscenarioConDatos();
-	
+	private Mesa mesa1;
+	private Pedido pedido1, pedido2;
+	private Comanda comanda1, comanda2;
+
 	@Before
 	public void setUp() throws Exception {
-		this.E1.setUp();
-		this.local=this.E1.getLocal();
+		mf = MetodosFacturacion.getInstance();
+		local = Local.getInstance();		
+		producto1 = new Producto(0,255,"Agua Mineral", 50, 250);
+		local.getProductos().add(producto1);
+		promocionProducto1 = new PromocionProducto(local.getProductos().get(0), "Lunes", true, true, 6, 25, true);
+		local.getPromocionesProductos().add(promocionProducto1);
+		promocionTemporal1 = new PromocionTemporal("Promocion1", "efectivo", 50, "Lunes", true, true);
+		local.getPromocionesTemporales().add(promocionTemporal1);
+		mesa1 = new Mesa(1);
+		local.getMesas().add(mesa1);
+		Mozo mozo1 = new Mozo(0, "Walter White", "07/09/1958", 1);
+		AsignacionDiaria asignacionDiaria = new AsignacionDiaria(mozo1, mesa1);
+		local.getAsignacionDiaria().add(asignacionDiaria);
+		promocionProducto2 = new PromocionProducto(local.getProductos().get(0), "Sabado", true, true, 6, 25, true);
+		local.getPromocionesProductos().add(promocionProducto2);
+		pedido1 = new Pedido("Jueves", 2, local.getProductos().get(0));
+		comanda1 = new Comanda(mesa1, pedido1, true);
+		local.getComandas().add(comanda1);		
+		Producto producto2 = new Producto(1,300,"Cerveza Quilmes",49,500);
+		local.getProductos().add(producto2);
+		pedido2 = new Pedido("Lunes", 2, local.getProductos().get(1));
+		comanda2 = new Comanda(mesa1, pedido2, true);
+		local.getComandas().add(comanda2);		
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		this.E1.tearDown();
+		local.getProductos().removeAll(local.getProductos());
+		local.getPromocionesProductos().removeAll(local.getPromocionesProductos());
+		local.getPromocionesTemporales().removeAll(local.getPromocionesTemporales());
+		local.getComandas().removeAll(local.getComandas());
+		local.getMesas().removeAll(local.getMesas());
+		Local.elimInstance();
 	}
 
 	@Test
@@ -434,6 +463,210 @@ public class TestMetodosFacturacionConDatos {
 		try {
 			mf.modificacionPromocionTemporal(promocionTemporal1, "Promocion1", "efectivo", 50, null, true, true);
 			Assert.fail("El dia no deberia ser nulo");
+		}catch(Exception e) {
+			
+		}
+	}
+
+	@Test
+	public void testGeneracionDeFacturaCaso1() {
+		Calendar fecha = Calendar.getInstance();
+		Factura factura;
+		try {
+			Mozo mozo = local.getMozoByMesa(mesa1);
+			float acumAnt = mozo.getAcumulados();
+			int mesasAnt = mozo.getMesasAtentidas();
+			float totalSinPromo = comanda1.getListaPedidos().get(0).getCantidad() * comanda1.getListaPedidos().get(0).getProducto().getPrecioVenta();
+			float descPromProd = promocionProducto2.getPorcentajeDescCantMin()/100;
+			float descPromTemp = promocionTemporal1.getPorcentajeDesc()/100;			
+			factura = mf.generacionDeFactura(fecha, "Lunes", comanda1, "efectivo");	
+			Assert.assertTrue("La factura no se acumulo", mozo.getAcumulados() == acumAnt+factura.getTotal());
+			Assert.assertTrue("La mesa no se agrego", mesasAnt + 1 == mozo.getMesasAtentidas());
+			Assert.assertTrue("Promocions no aplicadas", factura.getTotal() == totalSinPromo*descPromProd*descPromTemp);
+			Assert.assertEquals("El estado de mesa no ha sido cambiado", factura.getMesa().getEstado(), "libre");
+		}catch (Exception e) {
+			Assert.fail("No deberia ser lanzada una excepcion");
+		}
+	}
+	
+	@Test
+	public void testGeneracionDeFacturaCaso3() {
+		Calendar fecha = Calendar.getInstance();
+		Factura factura;
+		try {
+			factura = mf.generacionDeFactura(null, "Lunes", comanda1, "efectivo");
+			Assert.fail("No deberia ser nula la fecha");
+		}catch(Exception e) {
+			
+		}
+	}
+	@Test
+	public void testGeneracionDeFacturaCaso4() {
+		Calendar fecha = Calendar.getInstance();
+		Factura factura;
+		try {
+			factura = mf.generacionDeFactura(fecha, "LuneZ", comanda1, "efectivo");
+			Assert.fail("El dia deberia de existir");
+		}catch(Exception e) {
+			
+		}
+	}
+	
+	@Test
+	public void testGeneracionDeFacturaCaso5() {
+		Calendar fecha = Calendar.getInstance();
+		Factura factura;
+		try {
+			factura = mf.generacionDeFactura(fecha, null, comanda1, "efectivo");
+			Assert.fail("El dia no deberia ser nulo");
+		}catch(Exception e) {
+			
+		}
+	}
+	
+	@Test
+	public void testGeneracionDeFacturaCaso6() {
+		Calendar fecha = Calendar.getInstance();
+		Factura factura;
+		try {
+			factura = mf.generacionDeFactura(fecha, "Lunes", null, "efectivo");
+			Assert.fail("No deberia ser nula la comanda");
+		}catch(Exception e) {
+			
+		}
+	}
+	
+	@Test
+	public void testGeneracionDeFacturaCaso7() {
+		Calendar fecha = Calendar.getInstance();
+		Factura factura;
+		try {
+			factura = mf.generacionDeFactura(fecha, "Lunes", comanda1, "Bitcoin");
+			Assert.fail("El metodo de pago deberia existir");
+		}catch(Exception e) {
+			
+		}
+	}
+	
+	@Test
+	public void testAltaPedidoCaso1() {
+		try {
+			int stock = producto1.getStock();
+			Pedido pedido = mf.altaPedido(new GregorianCalendar().toString(), 10, producto1);
+			Assert.assertNotNull("Deberia de haberse creado el pedido", pedido);
+			Assert.assertEquals("No se actualizo el stock del producto", producto1.getStock(), stock);			
+		}catch(Exception e) {
+			Assert.fail("No deberia ser lanzada una excepcion");
+		}
+	}
+	
+	@Test
+	public void testAltaPedidoCaso2() {
+		try {
+			Pedido pedido = mf.altaPedido(null, 10, producto1);
+			Assert.fail("El pedido no deberia de ser nulo");
+		}catch(Exception e) {
+			
+		}
+	}
+	
+	@Test
+	public void testAltaPedidoCaso3() {
+		try {
+			Pedido ped = mf.altaPedido(new GregorianCalendar().toString(), -999, producto1);
+			Assert.fail("La cantidad deberia ser > 0");
+		}catch(Exception e) {
+
+		}
+	}
+	
+	@Test
+	public void testAltaPedidoCaso4() {
+		try {
+			Pedido ped = mf.altaPedido(new GregorianCalendar().toString(), 10, null);
+			Assert.fail("El producto no deberia de ser nulo");
+		}catch(Exception e) {
+
+		}
+	}
+	@Test
+	public void testBajaPedidoCaso1() {
+		try {
+			mf.bajaPedido(comanda1, pedido1);
+			int i = 0;
+			while(i<comanda1.getListaPedidos().size() && comanda1.getListaPedidos().get(i) != pedido1)
+				i++;
+			Assert.assertTrue("No se deberia haber encontrado el pedido", i >= comanda1.getListaPedidos().size());
+		}catch(Exception e) {
+			Assert.fail("No deberia ser lanzada una excepcion.");
+		}
+	}
+	
+	@Test
+	public void testBajaPedidoCaso2() {
+		try {
+			mf.bajaPedido(null, pedido1);
+			Assert.fail("La comanda no deberia ser nula");
+		}catch(Exception e) {
+			
+		}
+	}
+	@Test
+	public void testBajaPedidoCaso3() {
+		try {
+			mf.bajaPedido(comanda1, null);
+			Assert.fail("El pedido no deberia ser nulo");
+		}catch(Exception e) {
+			
+		}
+	}
+	
+	
+	@Test
+	public void testAltaComandaCaso1() {
+		try {
+			Comanda comanda = mf.altaComanda(mesa1, pedido1);
+			int i = 0;
+			while(i < local.getComandas().size() && local.getComandas().get(i) != comanda)
+				i++;
+			Assert.assertTrue("Se deberia de haber encontrado la comanda", i <= local.getComandas().size());
+			Assert.assertTrue("La comanda deberia estar activa", comanda.isEstado() == true);	
+		}catch(Exception e) {
+			Assert.fail("No deberia de ser lanzada una excepcion");
+		}
+	}
+	
+	@Test
+	public void testModificacionComandaCaso1() {
+		try {
+			mf.modificacionComanda(comanda1, pedido2, true);
+			int i = 0;
+			while(i < comanda1.getListaPedidos().size() && comanda1.getListaPedidos().get(i) != pedido2)
+				i++;
+			Assert.assertTrue("Deberia de haberse agregado el pedido", i < comanda1.getListaPedidos().size() );
+		}catch(Exception e) {
+			Assert.fail("No deberia ser lanzada una excepcion");
+		}
+	}
+	
+	@Test
+	public void testModificacionComandaCaso2() {
+		try {
+			mf.modificacionComanda(comanda1, pedido, false);
+			int i = 0;
+			while(i < comanda1.getListaPedidos().size() && comanda1.getListaPedidos().get(i) != pedido)
+				i++;
+			Assert.assertTrue("Deberia de haberse dado de baja el pedido", i >= comanda1.getListaPedidos().size() );
+		}catch(Exception e) {
+			Assert.fail("No deberia ser lanzada una excepcion");
+		}
+	}
+	
+	@Test
+	public void testModificacionComandaCaso3() {
+		try {
+			mf.modificacionComanda(comanda1, pedido2, false);
+			Assert.fail("No deberia continuar con la ejecucion");
 		}catch(Exception e) {
 			
 		}

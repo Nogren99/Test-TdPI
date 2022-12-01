@@ -60,7 +60,6 @@ public class TestMetodosFacturacionSinDatos {
 					&& promTemp.get(i).getPorcentajeDesc() != 50 && !promTemp.get(i).getDiasDePromo().equals("Lunes") 
 					&& promTemp.get(i).isActiva() != true && promTemp.get(i).isAcumulable() != true)
 				i++;
-			
 			Assert.assertTrue("Se deberia haber agregado la promocion temporal.", i < promTemp.size());
 		}catch(Exception e) {
 			Assert.fail("No deberia haberse lanzado una excepcion");
@@ -71,7 +70,7 @@ public class TestMetodosFacturacionSinDatos {
 	public void testModificacionPromocionTemporalCaso3(){
 		try {
 			mf.modificacionPromocionTemporal(new PromocionTemporal("Promocion365", "efectivo", 50, "Lunes", true, true), "Promocion365", "tarjeta", 60, "Jueves", true, true);
-			Assert.fail("No deberia entonctrarse la promocion");
+			Assert.fail("No deberia haberse encontrado la promocion");
 		}catch(Exception e) {
 			
 		}
