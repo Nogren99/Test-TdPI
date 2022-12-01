@@ -53,9 +53,9 @@ public class TestInterfazGraficaSinDatos {
     	JButton ingresar= (JButton) TestUtil.getComponentForName(controlador.getVista(), "botonIngreso");
     	
     	TestUtil.clickComponent(nombreUsuario, robot);
-    	TestUtil.tipeaTexto("Nahuel", robot);
+    	TestUtil.tipeaTexto("Meolans", robot);
     	TestUtil.clickComponent(contrasenia, robot);
-    	TestUtil.tipeaTexto("Calle123", robot);
+    	TestUtil.tipeaTexto("QWERTY1234", robot);
     	TestUtil.clickComponent(ingresar, robot);
     	
     	Assert.assertEquals("El tipo de usuario debe ser 0", 0, controlador.getTipoUsuario());
