@@ -26,7 +26,7 @@ public class TestMetodosFacturacionConDatos {
 	private MetodosFacturacion mf;
 	private Local local;
 	private Producto producto1; 
-	private PromocionProducto promocionProducto1, promocion producto 2;
+	private PromocionProducto promocionProducto1, promocionProducto2;
 	private PromocionTemporal promocionTemporal1;
 	private Mesa mesa1;
 	private Pedido pedido1, pedido2;
@@ -652,9 +652,9 @@ public class TestMetodosFacturacionConDatos {
 	@Test
 	public void testModificacionComandaCaso2() {
 		try {
-			mf.modificacionComanda(comanda1, pedido, false);
+			mf.modificacionComanda(comanda1, pedido1, false);
 			int i = 0;
-			while(i < comanda1.getListaPedidos().size() && comanda1.getListaPedidos().get(i) != pedido)
+			while(i < comanda1.getListaPedidos().size() && comanda1.getListaPedidos().get(i) != pedido1)
 				i++;
 			Assert.assertTrue("Deberia de haberse dado de baja el pedido", i >= comanda1.getListaPedidos().size() );
 		}catch(Exception e) {

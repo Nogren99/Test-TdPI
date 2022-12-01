@@ -29,12 +29,14 @@ public class EscenarioConDatos {
 		Producto producto2=new Producto(1,300,"Cerveza Quilmes",49,500);
 		Operario operario=new Operario(0, "Jose", "22/06/1978", "Meolans", "QWERTY1234");
 		Mozo mozo = new Mozo(0, "Walter White", "07/09/1958", 1);
+		Mozo mozo2 = new Mozo(1, "Jesse Pinkman", "01/09/1984", 0);
 		local.getMesas().add(mesa1);
 		local.getMesas().add(mesa2);
 		local.getProductos().add(producto);
 		local.getProductos().add(producto2);
 		local.getOperarios().add(operario);
 		local.getMozos().add(mozo);
+		local.getMozos().add(mozo2);
 		//ConfiguracionDeSistema config=ConfiguracionDeSistema.getInstance();
 	}
 
