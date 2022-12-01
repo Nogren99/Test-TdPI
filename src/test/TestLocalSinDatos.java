@@ -53,7 +53,7 @@ public class TestLocalSinDatos {
 	@Test
 	public void testLoginCaso4() {
 		try {
-			local.login("Lucas", "xaB1113");
+			local.login("Meolans", "QWERTY1234");
 			Assert.fail("Deberia tirar una excepcion, el operario no existe");
 		}catch(Exception e) {
 			

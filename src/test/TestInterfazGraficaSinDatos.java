@@ -61,8 +61,8 @@ public class TestInterfazGraficaSinDatos {
     	Assert.assertEquals("El tipo de usuario debe ser 0", 0, controlador.getTipoUsuario());
     	
     	Assert.assertNotNull("El usuario obtenido no deberia ser null",controlador.getOperario());
-    	Assert.assertEquals("El usuario obtenido no tiene el mismo nombre de usuario que el ingresado","Nahuel",controlador.getOperario().getNombreUsuario());
-    	Assert.assertEquals("El usuario obtenido no tiene la misma contrasenia que la ingresada","Calle123",controlador.getOperario().getPassword());
+    	Assert.assertEquals("El usuario obtenido no tiene el mismo nombre de usuario que el ingresado","Meolans",controlador.getOperario().getNombreUsuario());
+    	Assert.assertEquals("El usuario obtenido no tiene la misma contrasenia que la ingresada","QWERTY1234",controlador.getOperario().getPassword());
     	
     }
 

@@ -54,7 +54,29 @@ public class TestInterfazGraficaConDatos {
 	
 
     @Test
-    public void testLoginCorrecto() {
+    public void testLoginAdminCorrecto() {
+    	robot.delay(TestUtil.getDelay());
+    	
+    	JTextField nombreUsuario= (JTextField) TestUtil.getComponentForName(controlador.getVista(), "textUsuario");
+    	JTextField contrasenia =(JTextField) TestUtil.getComponentForName(controlador.getVista(), "textPassword");
+    	JButton ingresar= (JButton) TestUtil.getComponentForName(controlador.getVista(), "botonIngreso");
+    	
+    	TestUtil.clickComponent(nombreUsuario, robot);
+    	TestUtil.tipeaTexto("ADMIN", robot);
+    	TestUtil.clickComponent(contrasenia, robot);
+    	TestUtil.tipeaTexto("ADMIN1234", robot);
+    	TestUtil.clickComponent(ingresar, robot);
+    	
+    	Assert.assertEquals("El tipo de usuario debe ser 0", 0, controlador.getTipoUsuario());
+    	
+    	Assert.assertNotNull("El usuario obtenido no deberia ser null",controlador.getOperario());
+    	Assert.assertEquals("El usuario obtenido no tiene el mismo nombre de usuario que el ingresado","ADMIN",controlador.getOperario().getNombreUsuario());
+    	Assert.assertEquals("El usuario obtenido no tiene la misma contrasenia que la ingresada","ADMIN1234",controlador.getOperario().getPassword());
+    	
+    }
+    
+    @Test
+    public void testLoginOperarioCorrecto() {
     	robot.delay(TestUtil.getDelay());
     	
     	JTextField nombreUsuario= (JTextField) TestUtil.getComponentForName(controlador.getVista(), "textUsuario");

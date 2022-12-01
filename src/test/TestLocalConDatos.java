@@ -93,7 +93,7 @@ public class TestLocalConDatos {
 	@Test
 	public void testLoginCaso2() {
 		try{
-			local.login("Lucas", "xaB1113");
+			local.login("Meolans", "QWERTY1234");
 			Assert.assertFalse("Error el operario ingresado no es el administrador" , local.getAdmin());
 		}catch(Exception e) {
 			Assert.fail("No deberia lanzar excepcion");
@@ -103,7 +103,7 @@ public class TestLocalConDatos {
 	@Test
 	public void testLoginCaso3() {
 		try {
-			local.login(null, "xaB1113");
+			local.login(null, "QWERTY1234");
 			Assert.fail("No deberia continuar con la ejecucion.");
 		}catch(Exception e) {
 			
@@ -113,7 +113,7 @@ public class TestLocalConDatos {
 	@Test
 	public void testLoginCaso5() {
 		try {
-			local.login("Lucas", null);
+			local.login("Meolans", null);
 			Assert.fail("No deberia continuar con la ejecucion.");
 		}catch(Exception e) {
 			
