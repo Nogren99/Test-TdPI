@@ -38,12 +38,11 @@ public class TestPersistenciaVacio {
 	}
 
 	@Test
-	public void testGuardarPersistencia() {
+	public void testCrearPersistencia() {
 		 try{
-			 	File archivo = new File("Local.xml");
-	            local.guardarLocal("Local.xml");
+	            File archivo = new File("Local.xml");
+	            local.cargarLocal("Local.xml");
 	            Assert.assertTrue("Debería existir el archivo local.xml", archivo.exists());
-	            
 	        }
 	        catch (Exception e){
 	            Assert.fail("No debería lanzar una excepcion: " + e.getMessage());
@@ -51,276 +50,148 @@ public class TestPersistenciaVacio {
 	}
 	
 	@Test
-	public void testCrearPersistencia() {
+	public void testGuardarPersistencia() {
 		 try{
 	            File archivo = new File("Local.xml");
-	            local.cargarLocal("Local.xml");
-	            Assert.assertTrue("Debería existir el archivo local.xml", archivo.exists());
+	            local.guardarLocal("Local.xml");
+	            Assert.assertTrue("Debería existir el archivo local.xml", archivo.exists());    
 	        }
-	        catch (Exception e) {
+	        catch (Exception e){
 	            Assert.fail("No debería lanzar una excepcion: " + e.getMessage());
 	        }
 	}
 	
 	@Test
-	public void testLocalConMesas() {
+    public void testLocalVacio(){
+        try{
+        	Local local1= Local.getInstance();
+        	local.cargarLocal("Local.xml");
+        	local.guardarLocal("Local.xml");
+        	Local localAux=Local.getInstance();
+            Assert.assertEquals("Los archivos deberían ser distintos, uno vacio", local1,Local.getInstance()); 
+        }
+        catch (Exception e){
+            Assert.fail("No debería lanzar una excepcion: " + e.getMessage());
+        }
+    }
+	
+	@Test
+	public void testLocalMesas() {
 		try{
 			Local local1= Local.getInstance();
-        	agregarMesas(local1);
+			local.getMesas().add(new Mesa(6));
+			local.getMesas().add(new Mesa(7));
         	local1.guardarLocal("Local.xml");
         	Local.elimInstance();
-        	Local local2=Local.getInstance();
+        	Local localAux=Local.getInstance();
         	local.cargarLocal("Local.xml");
-            Assert.assertEquals("El local no se persistio correctamente", local1,local2);  
+            Assert.assertEquals("El local no se persistio correctamente", local1,localAux);  
         }
-        catch (Exception e)
-        {
+        catch (Exception e){
             Assert.fail("No debería lanzar excepcion: " + e.getMessage());
         }
 	}
 	
-	private void agregarMesas(Local local) {
-		local.getMesas().add(new Mesa(3));
-		local.getMesas().add(new Mesa(4));
-		local.getMesas().add(new Mesa(5));
-	}
-	
 	@Test
-	public void testLocalConMozos() {
-		try
-        {
+	public void testLocalMozos() {
+		try{
         	Local local1= Local.getInstance();
-        	agregarMozos(local1);
+        	local.getMozos().add(new Mozo(3,"Lucas","07/05/1986",6));
+    		local.getMozos().add(new Mozo(5,"Marcos","03/12/1993",7));
         	local.guardarLocal("Local.xml");
         	Local.elimInstance();
-        	Local local2=Local.getInstance();
+        	Local localAux=Local.getInstance();
         	local.cargarLocal("Local.xml");
-            Assert.assertEquals("El local no se persistio correctamente", local1,local2); 
+            Assert.assertEquals("El local no se persistió correctamente", local1,localAux); 
         }
-        catch (Exception e)
-        {
-            Assert.fail("No deberÃ­a lanzar excepcion: " + e.getMessage());
-        }
-	}
-	private void agregarMozos(Local local) {
-		local.getMozos().add(new Mozo(3,"Nahuel","13/10/1998",3));
-		local.getMozos().add(new Mozo(5,"Nahu","13/10/1998",4));
-		local.getMozos().add(new Mozo(4,"Nahue","13/10/1998",5));
-		
-	}
-	
-	@Test
-	public void testLocalConProductos() {
-		try
-        {
-        	Local local1= Local.getInstance();
-        	agregarProductos(local1);
-        	local.guardarLocal("Local.xml");
-        	Local.elimInstance();
-        	Local local2=Local.getInstance();
-        	local.cargarLocal("Local.xml");
-            Assert.assertEquals("El local no se persistio correctamente", local1,local2); 
-        }
-        catch (Exception e)
-        {
-            Assert.fail("No deberÃ­a lanzar excepcion: " + e.getMessage());
+        catch (Exception e){
+            Assert.fail("No debería lanzar una excepcion: " + e.getMessage());
         }
 	}
-	private void agregarProductos(Local local) {
-		local.getProductos().add(new Producto(3,10, "Pepeya", 400, 500));
-		local.getProductos().add(new Producto(4,10, "Coca cola", 400, 500));
-		local.getProductos().add(new Producto(5,10, "Pepsi", 400, 500));
-		
-	}
-	
-	@Test
-	public void testLocalConOperarios() {
-		try
-        {
-        	Local local1= Local.getInstance();
-        	agregarOperarios(local1);
-        	local.guardarLocal("Local.xml");
-        	Local.elimInstance();
-        	Local local2=Local.getInstance();
-        	local.cargarLocal("Local.xml");
-            Assert.assertEquals("El local no se persistio correctamente", local1,local2); 
-        }
-        catch (Exception e)
-        {
-            Assert.fail("No deberÃ­a lanzar excepcion: " + e.getMessage());
-        }
-	}
-	private void agregarOperarios(Local local) {
-		local.getOperarios().add(new Operario(3,"Nahuel","13/10/1998", "Nahuel03", "Nahuel03"));
-		local.getOperarios().add(new Operario(4,"Imanol","13/10/1998", "Nahue03", "Nahuel03"));
-		local.getOperarios().add(new Operario(5,"Juan","13/10/1998", "Nahu03", "Nahuel03"));
-	}
-	
 
 	@Test
-	public void testLocalConComandas() {
-		try
-        {
+	public void testLocalProductos() {
+		try{
         	Local local1= Local.getInstance();
-        	agregarComandas(local1);
+    		local.getProductos().add(new Producto(2,4, "Manaos", 10, 25));
+    		local.getProductos().add(new Producto(5,15, "Pitusas", 20, 25));
         	local.guardarLocal("Local.xml");
         	Local.elimInstance();
-        	Local local2=Local.getInstance();
+        	Local localAux=Local.getInstance();
         	local.cargarLocal("Local.xml");
-            Assert.assertEquals("El local no se persistio correctamente", local1,local2); 
+            Assert.assertEquals("El local no se persistio correctamente", local1,localAux); 
         }
-        catch (Exception e)
-        {
-            Assert.fail("No deberÃ­a lanzar excepcion: " + e.getMessage());
-        }
-	}
-	private void agregarComandas(Local local) {
-		local.getComandas().add(new Comanda(new Mesa(1), new Pedido("Jueves", 2, new Producto(3,10, "Pepeya", 400, 500)), true));
-		local.getComandas().add(new Comanda(new Mesa(2), new Pedido("Viernes", 2, new Producto(4,10, "Coca cola", 400, 500)), true));
-		local.getComandas().add(new Comanda(new Mesa(3), new Pedido("Domingo", 2, new Producto(5,10, "Pepsi", 400, 500)), true));
-		
-	}
-	
-	@Test
-	public void testLocalConPromocionTemporal() {
-		try
-        {
-        	Local local1= Local.getInstance();
-        	agregarPromocionTemporal(local1);
-        	local.guardarLocal("Local.xml");
-        	Local.elimInstance();
-        	Local local2=Local.getInstance();
-        	local.cargarLocal("Local.xml");
-            Assert.assertEquals("El local no se persistio correctamente", local1,local2); 
-        }
-        catch (Exception e)
-        {
-            Assert.fail("No deberÃ­a lanzar excepcion: " + e.getMessage());
+        catch (Exception e){
+            Assert.fail("No debería lanzar una excepcion: " + e.getMessage());
         }
 	}
-	private void agregarPromocionTemporal(Local local) {
-		local.getPromocionesTemporales().add(new PromocionTemporal("Promocion1", "ctaDNI", 40, "Jueves", true, true));
-		local.getPromocionesTemporales().add(new PromocionTemporal("Promocion2", "ctaDNI", 40, "Jueves", true, true));
-		local.getPromocionesTemporales().add(new PromocionTemporal("Promocion3", "ctaDNI", 40, "Jueves", true, true));
-		
-	}
-	
-	@Test
-	public void testLocalConPromocionProducto() {
-		try
-        {
-        	Local local1= Local.getInstance();
-        	agregarPromocionProducto(local1);
-        	local.guardarLocal("Local.xml");
-        	Local.elimInstance();
-        	Local local2=Local.getInstance();
-        	local.cargarLocal("Local.xml");
-            Assert.assertEquals("El local no se persistio correctamente", local1,local2); 
-        }
-        catch (Exception e)
-        {
-            Assert.fail("No deberÃ­a lanzar excepcion: " + e.getMessage());
-        }
-	}
-	private void agregarPromocionProducto(Local local) {
-		local.getPromocionesProductos().add(new PromocionProducto(new Producto(3,10, "Pepeya", 400, 500), "Martes", true, true, 2, 50, true));
-		local.getPromocionesProductos().add(new PromocionProducto(new Producto(4,10, "Coca cola", 400, 500), "Martes", true, true, 2, 50, true));
-		local.getPromocionesProductos().add(new PromocionProducto(new Producto(5,10, "Pepsi", 400, 500), "Martes", true, true, 2, 50, true));
-		
-	}
-	@Test
-	public void testLocalConAsignacionDiaria() {
-		try
-        {
-        	Local local1= Local.getInstance();
-        	agregarAsignacionDiaria(local1);
-        	local.guardarLocal("Local.xml");
-        	Local.elimInstance();
-        	Local local2=Local.getInstance();
-        	local.cargarLocal("Local.xml");
-            Assert.assertEquals("El local no se persistio correctamente", local1,local2); 
-        }
-        catch (Exception e)
-        {
-            Assert.fail("No deberÃ­a lanzar excepcion: " + e.getMessage());
-        }
-	}
-	private void agregarAsignacionDiaria(Local local) {
-		local.getAsignacionDiaria().add(new AsignacionDiaria(new Mozo(3,"Nahuel","13/10/1998",3),new Mesa(1)));
-		local.getAsignacionDiaria().add(new AsignacionDiaria(new Mozo(3,"Nahu","13/10/1998",3),new Mesa(2)));
-		local.getAsignacionDiaria().add(new AsignacionDiaria(new Mozo(3,"Nahue","13/10/1998",3),new Mesa(3)));
-		
-	}
-	
-	@Test
-	public void testLocalConFormasDePago() {
-		try
-        {
-        	Local local1= Local.getInstance();
-        	agregarFormasDePago(local1);
-        	local.guardarLocal("Local.xml");
-        	Local.elimInstance();
-        	Local local2=Local.getInstance();
-        	local.cargarLocal("Local.xml");
-            Assert.assertEquals("El local no se persistio correctamente", local1,local2); 
-        }
-        catch (Exception e)
-        {
-            Assert.fail("No deberÃ­a lanzar excepcion: " + e.getMessage());
-        }
-	}
-	
-	private void agregarFormasDePago(Local local) {
-		local.getFormasDePago().add("CuentaDni");
-		local.getFormasDePago().add("MercadoPago");
-		local.getFormasDePago().add("Tarjeta");
-		
-	}
-	
-	@Test
-	public void testLocalConNombreLocal() {
-		try
-        {
-        	Local local1= Local.getInstance();
-        	agregarNombreLocal(local1);
-        	local.guardarLocal("Local.xml");
-        	Local.elimInstance();
-        	Local local2=Local.getInstance();
-        	local.cargarLocal("Local.xml");
-            Assert.assertEquals("El local no se persistio correctamente", local1,local2); 
-        }
-        catch (Exception e)
-        {
-            Assert.fail("No deberÃ­a lanzar excepcion: " + e.getMessage());
-        }
-	}
-	
-	private void agregarNombreLocal(Local local) {
-		local.setNombreLocal("Carre4");
-	}
-	
-	@Test
-	public void testLocalConSueldo() {
-		try
-        {
-        	Local local1= Local.getInstance();
-        	agregarSueldo(local1);
-        	local.guardarLocal("Local.xml");
-        	Local.elimInstance();
-        	Local local2=Local.getInstance();
-        	local.cargarLocal("Local.xml");
-            Assert.assertEquals("El local no se persistio correctamente", local1,local2); 
-        }
-        catch (Exception e)
-        {
-            Assert.fail("No deberÃ­a lanzar excepcion: " + e.getMessage());
-        }
-	}
-	
-	private void agregarSueldo(Local local) {
-		local.setSueldo(1500);
-	}
-	
-	
 
+	@Test
+	public void testLocalOperarios() {
+		try{
+        	Local local1= Local.getInstance();
+    		local.getOperarios().add(new Operario(3,"Lucas","07/05/1986", "LucasCARP", "LucasCARP"));
+    		local.getOperarios().add(new Operario(4,"Marcos","03/12/1993", "LucassARP", "LucasCARP"));
+        	local.guardarLocal("Local.xml");
+        	Local.elimInstance();
+        	Local localAux=Local.getInstance();
+        	local.cargarLocal("Local.xml");
+            Assert.assertEquals("El local no se persistio correctamente", local1,localAux); 
+        }
+        catch (Exception e){
+            Assert.fail("No debería lanzar una excepcion: " + e.getMessage());
+        }
+	}
+	
+	@Test
+	public void testLocalComandas() {
+		try{
+        	Local local1= Local.getInstance();
+    		local.getComandas().add(new Comanda(new Mesa(1), new Pedido("Lunes", 2, new Producto(2,4, "Manaos", 10, 25)), true));
+    		local.getComandas().add(new Comanda(new Mesa(2), new Pedido("Viernes", 2, new Producto(5,15, "Pitusas", 20, 25)), true));
+        	local.guardarLocal("Local.xml");
+        	Local.elimInstance();
+        	Local localAux=Local.getInstance();
+        	local.cargarLocal("Local.xml");
+            Assert.assertEquals("El local no se persistio correctamente", local1,localAux); 
+        }
+        catch (Exception e){
+            Assert.fail("No debería lanzar una excepcion: " + e.getMessage());
+        }
+	}
+	
+	@Test
+	public void testLocalPromocionTemporal() {
+		try{
+        	Local local1= Local.getInstance();
+    		local.getPromocionesTemporales().add(new PromocionTemporal("Promo1", "efectivo", 40, "Lunes", true, true));
+    		local.getPromocionesTemporales().add(new PromocionTemporal("Promo2", "ctaDNI", 30, "Lunes", true, true));
+        	local.guardarLocal("Local.xml");
+        	Local.elimInstance();
+        	Local localAux=Local.getInstance();
+        	local.cargarLocal("Local.xml");
+            Assert.assertEquals("El local no se persistio correctamente", local1,localAux); 
+        }
+        catch (Exception e){
+            Assert.fail("No debería lanzar una excepcion: " + e.getMessage());
+        }
+	}
+		
+	@Test
+	public void testLocalPromocionProducto() {
+		try{
+        	Local local1= Local.getInstance();
+        	local.getPromocionesProductos().add(new PromocionProducto(new Producto(2,4, "Manaos", 10, 25), "Miercoles", true, true, 2, 50, true));
+    		local.getPromocionesProductos().add(new PromocionProducto(new Producto(5,15, "Pitusas", 20, 25), "Miercoles", true, true, 2, 50, true));
+        	local.guardarLocal("Local.xml");
+        	Local.elimInstance();
+        	Local localAux=Local.getInstance();
+        	local.cargarLocal("Local.xml");
+            Assert.assertEquals("El local no se persistio correctamente", local1,localAux); 
+        }
+        catch (Exception e){
+            Assert.fail("No debería lanzar una excepcion: " + e.getMessage());
+        }
+	}
+	
 }
