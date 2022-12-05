@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="15.0.2" class="java.beans.XMLDecoder">
+ <object class="persistencia.LocalDTO" id="LocalDTO0">
+  <void property="promocionesProductos">
+   <void method="add">
+    <object class="persistencia.PromocionProductoDTO">
+     <void property="activa">
+      <boolean>true</boolean>
+     </void>
+     <void property="cantidadMinima">
+      <int>2</int>
+     </void>
+     <void property="descuentoCantMin">
+      <boolean>true</boolean>
+     </void>
+     <void property="diaProm">
+      <string>Miercoles</string>
+     </void>
+     <void property="dosXuno">
+      <boolean>true</boolean>
+     </void>
+     <void property="porcentajeDescCantMin">
+      <float>2.0</float>
+     </void>
+     <void property="producto">
+      <object class="persistencia.ProductoDTO">
+       <void property="nombre">
+        <string>Manaos</string>
+       </void>
+       <void property="precioCosto">
+        <float>10.0</float>
+       </void>
+       <void property="precioVenta">
+        <float>25.0</float>
+       </void>
+       <void property="stock">
+        <int>4</int>
+       </void>
+      </object>
+     </void>
+    </object>
+   </void>
+   <void method="add">
+    <object class="persistencia.PromocionProductoDTO">
+     <void property="activa">
+      <boolean>true</boolean>
+     </void>
+     <void property="cantidadMinima">
+      <int>2</int>
+     </void>
+     <void property="descuentoCantMin">
+      <boolean>true</boolean>
+     </void>
+     <void property="diaProm">
+      <string>Miercoles</string>
+     </void>
+     <void property="dosXuno">
+      <boolean>true</boolean>
+     </void>
+     <void property="porcentajeDescCantMin">
+      <float>2.0</float>
+     </void>
+     <void property="producto">
+      <object class="persistencia.ProductoDTO">
+       <void property="nombre">
+        <string>Pitusas</string>
+       </void>
+       <void property="precioCosto">
+        <float>20.0</float>
+       </void>
+       <void property="precioVenta">
+        <float>25.0</float>
+       </void>
+       <void property="stock">
+        <int>15</int>
+       </void>
+      </object>
+     </void>
+    </object>
+   </void>
+  </void>
+ </object>
+</java>
