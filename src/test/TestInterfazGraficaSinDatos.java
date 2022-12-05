@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import capaDeNegocios.Local;
 import controlador.ControladorLogin;
-import testtTemporal.TestUtil;
 
 public class TestInterfazGraficaSinDatos {
 	Robot robot;
